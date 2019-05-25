@@ -22,11 +22,11 @@ from glob import glob
 
 # print([ssim_exact(refA, refPRS), ssim_exact(refA, refMoodoki)])
 
-inDir = 'C:\\Users\\prs\\repos\\sese_thesis\\testing\\generate_train_val_data\\dataV2\\images_inpainted_val'
-imgExt = 'jpg'
-outDir = 'C:\\Users\\prs\\repos\\sese_thesis\\testing\\compare_nets\\output'
-imgSize = [64, 128]
-
+inDir = 'C:\\Users\\ricca\\OneDrive\\Education\\SESE\\thesis\\experiments\\celebA\\input'
+imgExt = 'png'
+outDir = 'C:\\Users\\ricca\\OneDrive\\Education\\SESE\\thesis\\experiments\\celebA\\output_center_mask'
+#outDir = 'C:\\Users\\ricca\\OneDrive\\Education\\SESE\\thesis\\experiments\\celebA\\output_random_mask'
+imgSize = [64, 64]
 
 psnrs = []
 ssims = []
@@ -36,21 +36,17 @@ i = 0
 for imgfilename in imgfilenames:
     lastIndex = imgfilename.rfind("\\")
     fileName = imgfilename[lastIndex+1:]
-    fileName = fileName[fileName.index('frame')+5:fileName.index('.'+imgExt)]
-
-    baseDir = outDir+'\\'+fileName+'_lr_0.0100_l1_msk_file'
+    fileName = fileName[fileName.index('_')+1:]
 
     #  ref_img = scipy.misc.imresize(scipy.misc.imread(
     #     imgfilename, flatten=True), size=imgSize, interp='cubic')
 
-    ref_img = baseDir+'\\input.png'
-    if not os.path.exists(ref_img):
-        continue
+    ref_img = imgfilename
     ref_img = scipy.misc.imread(ref_img, flatten=True)
 
-    ref_prsFile = baseDir+'\\proposed.png'
+    ref_prsFile = outDir+'\\prs\\inpaint_'+fileName
     ref_prsFile = scipy.misc.imread(ref_prsFile, flatten=True)
-    ref_moodokiFile = baseDir+'\\raymond.png'
+    ref_moodokiFile = outDir + '\\moodoki\\inpaint_' + fileName
     ref_moodokiFile = scipy.misc.imread(ref_moodokiFile, flatten=True)
 
     _psnrPRS = psnr(ref_img, ref_prsFile)
