@@ -23,11 +23,11 @@ from skimage.measure import compare_ssim
 
 # print([ssim_exact(refA, refPRS), ssim_exact(refA, refMoodoki)])
 
-inDir = 'C:\\Users\\prs\\repos\\sese_thesis\\testing\\generate_train_val_data\\dataV2\\images_inpainted_val'
+inDir = 'D:\\prs\\dataV4\\images_inpainted_val'
 imgExt = 'jpg'
-outDir = 'C:\\Users\\prs\\repos\\sese_thesis\\testing\\compare_nets\\output'
+outDir = 'D:\\prs\\dataV4\\output\\w64_h64_z100_bch256_k3_ep_25_v4'
 prefix = 'results\\laparoscopic\\'
-imgSize = [64, 128]
+imgSize = [64, 64]
 
 psnrs = []
 ssims = []
@@ -36,11 +36,13 @@ len_ = len(imgfilenames)
 i = 0
 for imgfilename in imgfilenames:
     lastIndex = imgfilename.rfind("\\")
-    fileName = imgfilename[lastIndex + 1:]
-    fileName = fileName[fileName.index('_') + 1:]
+    fileName = imgfilename[lastIndex+1:]
+    fileName = fileName[fileName.index('frame')+5:fileName.index('.'+imgExt)]
 
-    #  ref_img = scipy.misc.imresize(imageio.imread(
-    #     imgfilename), size=imgSize, interp='cubic')
+    baseDir = outDir+'\\'+fileName+'_lr_0.0100_l1_msk_file'
+
+    #  ref_img = scipy.misc.imresize(scipy.misc.imread(
+    #     imgfilename, flatten=True), size=imgSize, interp='cubic')
 
     ref_img = baseDir+'\\input.png'
     if not os.path.exists(ref_img):
