@@ -18,9 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy
 import math
+import math
 
 def psnr(img1, img2):
-    mse = numpy.mean( (img1 - img2) ** 2 )
+    diff = (img1 - img2)
+    if True:
+        cnt = numpy.count_nonzero(diff)
+        if cnt == 0:
+            return 0
+        mse = numpy.sum(diff ** 2) / cnt
+    else:
+        mse = numpy.mean(diff ** 2)
     if mse == 0:
         return 100
     PIXEL_MAX = 255.0

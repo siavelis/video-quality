@@ -23,28 +23,25 @@ from skimage.measure import compare_ssim
 
 # print([ssim_exact(refA, refPRS), ssim_exact(refA, refMoodoki)])
 
-inDir = 'D:\\prs\\dataV4\\images_inpainted_val'
-imgExt = 'jpg'
-outDir = 'D:\\prs\\dataV4\\output\\w64_h64_z100_bch256_k3_ep_25_v4'
-prefix = 'results\\laparoscopic\\'
+inDir = 'D:\\prs\\dataV2\\output_large\\**'
+imgExt = 'png'
+outDir = inDir
+prefix = 'results\\laparoscopic_V2_large\\'
 imgSize = [64, 64]
 
 psnrs = []
 ssims = []
-imgfilenames = glob(inDir + '/*.' + imgExt)
+imgfilenames = glob(inDir + '\\input.' + imgExt)
 len_ = len(imgfilenames)
 i = 0
 for imgfilename in imgfilenames:
     lastIndex = imgfilename.rfind("\\")
-    fileName = imgfilename[lastIndex+1:]
-    fileName = fileName[fileName.index('frame')+5:fileName.index('.'+imgExt)]
+    baseDir = imgfilename[0:lastIndex]
 
-    baseDir = outDir+'\\'+fileName+'_lr_0.0100_l1_msk_file'
+    lastIndex = baseDir .rfind("\\")
+    fileName = imgfilename[lastIndex + 1:]
 
-    #  ref_img = scipy.misc.imresize(scipy.misc.imread(
-    #     imgfilename, flatten=True), size=imgSize, interp='cubic')
-
-    ref_img = baseDir+'\\input.png'
+    ref_img = baseDir + '\\telea.png'
     if not os.path.exists(ref_img):
         continue
     ref_img = imageio.imread(ref_img)
@@ -58,7 +55,8 @@ for imgfilename in imgfilenames:
     _psnrMoodoki = psnr(ref_img, ref_moodokiFile)
 
     tuple_ = [fileName, _psnrPRS, _psnrMoodoki]
-    psnrs.append(tuple_)
+    if _psnrPRS != 0 and _psnrMoodoki != 0:
+        psnrs.append(tuple_)
     # print(tuple_)
 
     ref_img = ref_img / 255.0
